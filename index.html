@@ -137,6 +137,16 @@ window.MUSE_TICKER = {
   .lab .intro{color:var(--muted);font-size:15px;line-height:1.6;max-width:820px}
   .lab + .lab{margin-top:34px}
 
+  /* context lab */
+  .ctx-list{display:flex;flex-direction:column;gap:9px;margin-top:18px}
+  .ctx-chunk{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:12px 15px;
+    font-size:14px;line-height:1.55;animation:fadeUp .35s ease both}
+  .ctx-chunk .c-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:1.6px;color:var(--gold);
+    display:block;margin-bottom:4px;text-transform:uppercase}
+  .ctx-chunk.fell{opacity:.42;border-color:rgba(255,90,90,.55)}
+  .ctx-chunk.fell .c-tag{color:#ff9d9d}
+  .ctx-chunk.fell .c-text{text-decoration:line-through}
+
   /* boot lab */
   .boot-grid{display:grid;grid-template-columns:300px 1fr;gap:26px;margin-top:24px}
   @media (max-width:820px){.boot-grid{grid-template-columns:1fr}}
@@ -382,11 +392,21 @@ window.MUSE_TICKER = {
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="sec-tag">The Curriculum</div>
-      <h2>Six modules. One shipped system.</h2>
-      <p>Every module ends with your hands on the machine. Three of them have live labs on this
+      <h2>Ten modules. One shipped system.</h2>
+      <p>Every module ends with your hands on the machine. Four of them have live labs on this
         page right now — the same labs, bigger, wait inside the course.</p>
     </div>
     <div class="grid">
+      <article class="card reveal">
+        <div class="art"><span class="num">MODULE 00</span><video src="think.mp4" poster="think.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: glowing tokens streaming into a circuit brain inside a window of light"></video></div>
+        <div class="body">
+          <h3>How the Machine Thinks</h3>
+          <p>Tokens, context windows, and why the machine sounds certain when it's guessing.
+            The one mental model that explains everything AI does — why it forgets, why it invents,
+            why order matters. Start here, and nothing downstream ever looks like magic again.</p>
+          <a class="lablink" href="#lab-context">Open the Context Lab →</a>
+        </div>
+      </article>
       <article class="card reveal">
         <div class="art"><span class="num">MODULE 01</span><video src="module-1.mp4" poster="module-1.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: hologram of stacked context layers loading above a glowing core"></video></div>
         <div class="body">
@@ -397,7 +417,16 @@ window.MUSE_TICKER = {
         </div>
       </article>
       <article class="card reveal">
-        <div class="art"><span class="num">MODULE 02</span><video src="module-2.mp4" poster="module-2.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: glowing documents streaming through a gold retrieval funnel"></video></div>
+        <div class="art"><span class="num">MODULE 02</span><video src="memory.mp4" poster="memory.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: a swirling pool of light connected by a beam to a vast golden archive vault"></video></div>
+        <div class="body">
+          <h3>Memory &amp; State — Why AI Forgets</h3>
+          <p>The machine forgets everything the moment a chat ends — unless you build it a memory.
+            Working memory, long-term memory, and state: how a system holds a customer's name,
+            last Tuesday's quote, and where a job stands — across days, not seconds.</p>
+        </div>
+      </article>
+      <article class="card reveal">
+        <div class="art"><span class="num">MODULE 03</span><video src="module-2.mp4" poster="module-2.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: glowing documents streaming through a gold retrieval funnel"></video></div>
         <div class="body">
           <h3>Retrieval, For Real</h3>
           <p>Not "upload a PDF and pray." Pre-retrieval, retrieval, post-retrieval — filtering, scoring,
@@ -405,7 +434,7 @@ window.MUSE_TICKER = {
         </div>
       </article>
       <article class="card reveal">
-        <div class="art"><span class="num">MODULE 03</span><video src="module-3.mp4" poster="module-3.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: interlocking gold gears and network nodes in a circular agent loop"></video></div>
+        <div class="art"><span class="num">MODULE 04</span><video src="module-3.mp4" poster="module-3.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: interlocking gold gears and network nodes in a circular agent loop"></video></div>
         <div class="body">
           <h3>The Agent Loop</h3>
           <p>Tools, tool tracking, state. The loop that turns a chat into a worker: answer, quote, book,
@@ -414,7 +443,16 @@ window.MUSE_TICKER = {
         </div>
       </article>
       <article class="card reveal">
-        <div class="art"><span class="num">MODULE 04</span><video src="module-4.mp4" poster="module-4.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: gold tuning dials and a voice waveform on a dark console"></video></div>
+        <div class="art"><span class="num">MODULE 05</span><video src="senses.mp4" poster="senses.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: a golden holographic ear with sound rings beside a camera-iris eye of light"></video></div>
+        <div class="body">
+          <h3>Voice, Vision &amp; the Senses</h3>
+          <p>Chat is only one sense. Give your system ears and eyes: phone calls it can hold,
+            photos it can read, documents it can understand — the same senses running live today
+            in Alice's phone receptionist and photo estimator.</p>
+        </div>
+      </article>
+      <article class="card reveal">
+        <div class="art"><span class="num">MODULE 06</span><video src="module-4.mp4" poster="module-4.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: gold tuning dials and a voice waveform on a dark console"></video></div>
         <div class="body">
           <h3>Fine-Tuning, Owner Edition</h3>
           <p>Train the system on your trade, your prices, your voice — no code. The owner-level version
@@ -422,7 +460,7 @@ window.MUSE_TICKER = {
         </div>
       </article>
       <article class="card reveal">
-        <div class="art"><span class="num">MODULE 05</span><video src="module-5.mp4" poster="module-5.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: gold radar sweep catching red anomalies on a dark screen"></video></div>
+        <div class="art"><span class="num">MODULE 07</span><video src="module-5.mp4" poster="module-5.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: gold radar sweep catching red anomalies on a dark screen"></video></div>
         <div class="body">
           <h3>Evaluation — Catching What It Misses</h3>
           <p>Production systems are graded, not trusted. Score transcripts, hunt the planted misses —
@@ -431,7 +469,16 @@ window.MUSE_TICKER = {
         </div>
       </article>
       <article class="card reveal">
-        <div class="art"><span class="num">MODULE 06</span><video src="module-6.mp4" poster="module-6.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: a glowing gold system core launching upward with light trails"></video></div>
+        <div class="art"><span class="num">MODULE 08</span><video src="guardrails.mp4" poster="guardrails.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: a golden shield and lock core guarding a dark vault door"></video></div>
+        <div class="body">
+          <h3>Guardrails, Privacy &amp; Trust</h3>
+          <p>Power without a fence is a liability. What the machine must never say, never store,
+            never send — and when local beats cloud. The module that keeps your system, your
+            customers, and your good name safe.</p>
+        </div>
+      </article>
+      <article class="card reveal">
+        <div class="art"><span class="num">MODULE 09</span><video src="module-6.mp4" poster="module-6.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Motion graphic: a glowing gold system core launching upward with light trails"></video></div>
         <div class="body">
           <h3>Capstone — Ship It Live</h3>
           <p>No certificate for watching. You graduate when one production system — yours — is live,
@@ -442,14 +489,54 @@ window.MUSE_TICKER = {
   </div>
 </section>
 
+<!-- ================= COHORT 2 ================= -->
+<section style="padding-top:6px">
+  <div class="wrap">
+    <div class="lab reveal">
+      <div class="lab-head"><span class="mod">Cohort 2 · The Advanced Tier</span><h3>Graduate — then go deeper.</h3></div>
+      <p class="intro">Five advanced modules, opening to Composer graduates first. This is the
+        second tier: where builders turn a working system into an unfair advantage — and an offer.</p>
+      <div class="ctx-list">
+        <div class="ctx-chunk"><span class="c-tag">Advanced · 01</span><span class="c-text"><b>Tools &amp; Permissions</b> — AI that books, charges, and messages in the real world, on a leash you design.</span></div>
+        <div class="ctx-chunk"><span class="c-tag">Advanced · 02</span><span class="c-text"><b>The Economics of Intelligence</b> — what every call costs, and when the small cheap model beats the giant.</span></div>
+        <div class="ctx-chunk"><span class="c-tag">Advanced · 03</span><span class="c-text"><b>Failure School</b> — a full module of broken systems. Diagnose the failure before you're allowed to fix it.</span></div>
+        <div class="ctx-chunk"><span class="c-tag">Advanced · 04</span><span class="c-text"><b>Your Business Is the Dataset</b> — your prices, reviews, and job history become the training set.</span></div>
+        <div class="ctx-chunk"><span class="c-tag">Advanced · 05</span><span class="c-text"><b>Selling the System</b> — package what you built: price it, demo it, guarantee it.</span></div>
+      </div>
+      <p class="intro" style="margin-top:16px">Cohort 2 enrollment opens to the waitlist after Cohort 1 ships.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ================= LABS ================= -->
 <section id="labs" style="padding-top:20px">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="sec-tag">Live Labs — No Signup</div>
       <h2>Don't take our word for it. Break the machine yourself.</h2>
-      <p>Three working slices of the course, live on this page. Toggle the context. Assemble the
+      <p>Four working slices of the course, live on this page. Fill the window. Toggle the context. Assemble the
         pipeline. Hunt the misses. This is how every module in THE COMPOSER feels.</p>
+    </div>
+
+    <!-- LAB D: CONTEXT WINDOW -->
+    <div class="lab reveal" id="lab-context">
+      <div class="lab-head"><span class="mod">Module 00 · Lab</span><h3>The Context Window</h3></div>
+      <p class="intro">Everything the machine "knows" during a conversation lives in one window,
+        measured in tokens — roughly one word each. This demo window holds 120. When it overflows,
+        the oldest words fall out the back and stop existing. That's not the machine ignoring you;
+        that's why it "forgot" your name. Fill it and watch.</p>
+      <div class="palette">
+        <button class="block-btn" data-ctx="story">+ The long story<small>45 tokens of backstory</small></button>
+        <button class="block-btn" data-ctx="prices">+ The price list<small>31 tokens of rates</small></button>
+        <button class="block-btn" data-ctx="contract">+ The service agreement<small>45 tokens of terms</small></button>
+        <button class="block-btn" id="ctxReset">Reset window<small>Start the conversation over</small></button>
+      </div>
+      <div class="meter-wrap">
+        <div class="meter-top"><span>Context window</span><b id="ctxCount">0 / 120 tokens</b></div>
+        <div class="meter"><div class="meter-fill" id="ctxMeter"></div></div>
+      </div>
+      <div class="ctx-list" id="ctxList"></div>
+      <div class="flag" id="ctxFlag" style="margin-top:16px"></div>
     </div>
 
     <!-- LAB A: BOOT SEQUENCE -->
@@ -488,7 +575,7 @@ window.MUSE_TICKER = {
 
     <!-- LAB B: COMPOSER PLAYGROUND -->
     <div class="lab reveal" id="lab-playground">
-      <div class="lab-head"><span class="mod">Module 03 · Lab</span><h3>The Composer Playground</h3></div>
+      <div class="lab-head"><span class="mod">Module 04 · Lab</span><h3>The Composer Playground</h3></div>
       <p class="intro">Click blocks to assemble your agent's pipeline, in order. Then run a live
         request through it. Order is not decoration — it's the difference between a booked job
         and a booked headache. Click a placed block's ✕ to remove it.</p>
@@ -510,7 +597,7 @@ window.MUSE_TICKER = {
 
     <!-- LAB C: MISS HUNT -->
     <div class="lab reveal" id="lab-hunt">
-      <div class="lab-head"><span class="mod">Module 05 · Lab</span><h3>Miss Hunt</h3></div>
+      <div class="lab-head"><span class="mod">Module 07 · Lab</span><h3>Miss Hunt</h3></div>
       <p class="intro">Three real-style transcripts. Each hides exactly one miss — an invented price,
         a dropped booking, a broken guardrail. Click the message you believe is the miss.
         Evaluators don't trust systems. They grade them.</p>
@@ -583,6 +670,60 @@ window.MUSE_TICKER = {
     entries.forEach(function(en){ if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
   }, { threshold: 0.12 });
   els.forEach(function(e){ io.observe(e); });
+})();
+
+/* ================= LAB D — CONTEXT WINDOW ================= */
+(function(){
+  var CAP = 120;
+  var TEXTS = {
+    system: "You are Alice, the front desk for Capital 7 Logistics. You answer questions, quote only from the owner price list, and book jobs.",
+    dana: "Hi I am Dana Whitfield at 412 Oak Street my kitchen sink is leaking under the cabinet and it is getting worse can someone come Thursday",
+    story: "While you are at it the house is a two story colonial built in nineteen eighty four with a steep driveway and a narrow side gate the basement floods every spring and my husband usually handles all of this but he is away until November",
+    prices: "Price list two movers two hundred dollars per two hour block one hundred per extra hour box truck one hundred fifty dollars thirty five per set of steps deposit fifty dollars",
+    contract: "Service agreement the customer agrees to a fifty dollar deposit to hold the slot deposits apply to the final bill cancellations inside twenty four hours forfeit the deposit the crew arrives within the booked window and the customer clears a path to the work area"
+  };
+  var TAGS = { system:"System instructions", dana:"Customer · Dana", story:"Customer · the long story", prices:"Owner price list", contract:"Service agreement" };
+  var chunks = [];
+  function words(t){ return t.trim().split(/\s+/).length; }
+  function reset(){ chunks = [ {k:"system"}, {k:"dana"} ]; render(); }
+  function render(){
+    var list = document.getElementById("ctxList");
+    var total = 0, i, n;
+    for (i=0;i<chunks.length;i++) total += words(TEXTS[chunks[i].k]);
+    // sliding window: oldest chunks fall until the rest fit
+    var kept = total, fell = [];
+    for (i=0;i<chunks.length;i++){
+      if (kept <= CAP) break;
+      kept -= words(TEXTS[chunks[i].k]); fell.push(i);
+    }
+    var html = "";
+    for (i=0;i<chunks.length;i++){
+      var k = chunks[i].k, isFell = fell.indexOf(i) >= 0;
+      html += '<div class="ctx-chunk' + (isFell ? " fell" : "") + '"><span class="c-tag">' +
+        TAGS[k] + " · " + words(TEXTS[k]) + " tokens" + (isFell ? " · FELL OUT OF THE WINDOW" : "") +
+        '</span><span class="c-text">' + TEXTS[k] + "</span></div>";
+    }
+    list.innerHTML = html;
+    document.getElementById("ctxCount").textContent = kept + " / " + CAP + " tokens";
+    document.getElementById("ctxMeter").style.width = Math.min(100, Math.round(kept / CAP * 100)) + "%";
+    var flag = document.getElementById("ctxFlag");
+    if (fell.length === 0){
+      flag.className = "flag show good";
+      flag.textContent = "The machine sees everything in the window — for now. Keep adding and something has to give.";
+    } else {
+      var names = fell.map(function(idx){ return TAGS[chunks[idx].k]; }).join(", ");
+      flag.className = "flag show bad";
+      flag.textContent = "Gone: " + names + ". Those words no longer exist for the machine — if that was the customer's name, address, or the rules it lives by, the answers change and nobody gets an alert. This is exactly why Module 02 builds it a real memory.";
+    }
+  }
+  var btns = document.querySelectorAll("[data-ctx]");
+  for (var j=0;j<btns.length;j++){
+    btns[j].addEventListener("click", function(){
+      chunks.push({ k: this.getAttribute("data-ctx") }); render();
+    });
+  }
+  document.getElementById("ctxReset").addEventListener("click", reset);
+  reset();
 })();
 
 /* ================= LAB A — BOOT SEQUENCE ================= */
