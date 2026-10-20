@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE COMPOSER — Build Production AI, Not Prompts</title>
+<meta name="description" content="An interactive course for business owners: compose production AI systems — boot sequence, retrieval, agent loops, fine-tuning, evaluation — and ship one live system.">
+<script>
+window.MUSE_TICKER = {
+  items: [
+    "COMPOSE", "BOOT SEQUENCE", "RETRIEVAL", "AGENT LOOP", "FINE-TUNING",
+    "EVALUATION", "PRODUCTION AI", "NOT PROMPTS", "SHIP IT LIVE",
+    "PRACTICE INSIDE A REAL SYSTEM"
+  ],
+  highlight: ["PRODUCTION AI", "SHIP IT LIVE", "PRACTICE INSIDE A REAL SYSTEM"],
+  separator: "✦",
+  speed: 30,
+  colors: { bg: "#05070d", text: "#dbe6ff", accent: "#e8c766", border: "#1c2a47" }
+};
+</script>
+<style>
+  :root{
+    --bg:#05070d; --bg2:#080c16; --panel:#0a0f1c; --panel2:#0d1424;
+    --line:#1c2a47; --gold:#e8c766; --gold2:#d9a441; --ink:#e8edf7;
+    --muted:#93a4c3; --red:#ff5a5a; --green:#3ddc84; --cyan:#57c8ff;
+    --mono:ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace;
+    --sans:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+  ::selection{background:var(--gold);color:#0a0f1c}
+  a{color:var(--gold)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+
+  /* ---------- ticker (component pattern) ---------- */
+  .mtk{overflow:hidden;background:var(--mtk-bg,#05070d);
+    border-top:1px solid var(--mtk-border,#1c2a47);
+    border-bottom:1px solid var(--mtk-border,#1c2a47);
+    font-family:var(--mono);position:relative;z-index:5}
+  .mtk-track{display:flex;width:max-content;animation:mtkScroll 30s linear infinite}
+  .mtk:hover .mtk-track{animation-play-state:paused}
+  .mtk-seq{display:flex;align-items:center;flex-shrink:0;white-space:nowrap;
+    padding:9px 0;font-size:12.5px;letter-spacing:1.6px;text-transform:uppercase;
+    color:var(--mtk-text,#dbe6ff)}
+  .mtk-item{padding:0 14px}
+  .mtk-item.hot{color:var(--mtk-accent,#e8c766);font-weight:700}
+  .mtk-sep{color:var(--mtk-accent,#e8c766);opacity:.85}
+  @keyframes mtkScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;
+    text-align:center;overflow:hidden}
+  .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+  .hero .veil{position:absolute;inset:0;background:
+    radial-gradient(ellipse 80% 55% at 50% 38%,rgba(232,199,102,.10),transparent 60%),
+    linear-gradient(180deg,rgba(5,7,13,.55) 0%,rgba(5,7,13,.35) 40%,rgba(5,7,13,.92) 88%,var(--bg) 100%)}
+  .hero-inner{position:relative;z-index:2;padding:110px 22px 90px;max-width:960px}
+  .hero .kicker{font-family:var(--mono);letter-spacing:4px;font-size:12px;color:var(--gold);
+    text-transform:uppercase;margin-bottom:20px;animation:fadeUp .9s ease both}
+  .hero h1{font-size:clamp(52px,11vw,118px);line-height:.95;font-weight:900;letter-spacing:1px;
+    background:linear-gradient(180deg,#fff7dd 0%,var(--gold) 55%,var(--gold2) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 26px rgba(232,199,102,.25));animation:fadeUp .9s .1s ease both}
+  .hero .sub{font-size:clamp(20px,3.4vw,32px);font-weight:600;color:#fff;margin-top:16px;animation:fadeUp .9s .2s ease both}
+  .hero .lede{color:var(--muted);font-size:clamp(15px,2vw,18px);line-height:1.65;max-width:680px;
+    margin:18px auto 0;animation:fadeUp .9s .3s ease both}
+  .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:34px;animation:fadeUp .9s .4s ease both}
+  .btn{display:inline-block;font-family:var(--mono);letter-spacing:1.6px;text-transform:uppercase;
+    font-size:13.5px;font-weight:700;text-decoration:none;padding:16px 30px;border-radius:10px;
+    transition:transform .2s ease,box-shadow .2s ease,background .2s ease;cursor:pointer;border:1px solid transparent}
+  .btn-gold{background:linear-gradient(180deg,var(--gold),var(--gold2));color:#171106;
+    box-shadow:0 0 0 rgba(232,199,102,0)}
+  .btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 34px rgba(232,199,102,.35)}
+  .btn-ghost{background:rgba(10,15,28,.6);color:var(--ink);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+  .hero .scrollcue{margin-top:52px;color:var(--muted);font-family:var(--mono);font-size:11px;
+    letter-spacing:3px;text-transform:uppercase;animation:cueFloat 2.2s ease-in-out infinite}
+  @keyframes cueFloat{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(7px);opacity:1}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+  /* ---------- sections ---------- */
+  section{padding:88px 0}
+  .sec-head{text-align:center;max-width:760px;margin:0 auto 46px}
+  .sec-tag{font-family:var(--mono);color:var(--gold);letter-spacing:3.5px;font-size:11.5px;
+    text-transform:uppercase;margin-bottom:12px}
+  .sec-head h2{font-size:clamp(28px,4.6vw,44px);font-weight:800;line-height:1.12}
+  .sec-head p{color:var(--muted);margin-top:12px;line-height:1.65;font-size:16px}
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- system diagram ---------- */
+  .diagram-shell{background:linear-gradient(180deg,var(--panel),var(--bg2));
+    border:1px solid var(--line);border-radius:18px;padding:34px 22px 26px;overflow-x:auto}
+  .diagram-shell svg{min-width:900px;width:100%;height:auto;display:block}
+  .stage-label{font-family:var(--mono);font-size:13.5px;font-weight:700;fill:#fff;letter-spacing:1px}
+  .stage-sub{font-family:var(--mono);font-size:10px;fill:var(--muted);letter-spacing:.6px}
+  .flow-path{stroke:var(--gold2);stroke-width:2.5;fill:none;stroke-dasharray:8 7;
+    animation:dashMove 1.4s linear infinite;opacity:.85}
+  @keyframes dashMove{to{stroke-dashoffset:-30}}
+  .stage-node{fill:#0d1424;stroke:var(--gold);stroke-width:1.6}
+  .stage-node-glow{fill:none;stroke:rgba(232,199,102,.35);stroke-width:6}
+  .diagram-note{text-align:center;color:var(--muted);font-size:13.5px;margin-top:16px;font-family:var(--mono);letter-spacing:.4px}
+
+  /* ---------- modules ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px}
+  .card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);
+    border-radius:16px;overflow:hidden;transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease}
+  .card:hover{transform:translateY(-7px);border-color:var(--gold2);box-shadow:0 18px 44px rgba(0,0,0,.55),0 0 0 1px rgba(232,199,102,.15)}
+  .card .art{height:190px;overflow:hidden;position:relative}
+  .card .art img{width:100%;height:100%;object-fit:cover;display:block;
+    transition:transform .6s ease;filter:saturate(1.05)}
+  .card:hover .art img{transform:scale(1.07)}
+  .card .art::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,transparent 45%,rgba(10,15,28,.88))}
+  .card .num{position:absolute;top:12px;left:14px;z-index:2;font-family:var(--mono);
+    font-size:12px;font-weight:700;letter-spacing:2px;color:#0d1424;background:var(--gold);
+    padding:4px 10px;border-radius:6px}
+  .card .body{padding:20px 22px 24px}
+  .card h3{font-size:20px;font-weight:800;line-height:1.25}
+  .card p{color:var(--muted);font-size:14.5px;line-height:1.6;margin-top:9px}
+  .card .lablink{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:12px;
+    letter-spacing:1.4px;text-transform:uppercase;color:var(--gold);text-decoration:none}
+  .card .lablink:hover{text-decoration:underline}
+
+  /* ---------- labs (shared) ---------- */
+  .lab{background:linear-gradient(180deg,#0b1120,#070b14);border:1px solid var(--line);
+    border-radius:18px;padding:30px 28px 32px;position:relative;overflow:hidden}
+  .lab::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+  .lab-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+  .lab-head .mod{font-family:var(--mono);color:var(--gold);font-size:12px;letter-spacing:2.5px;text-transform:uppercase}
+  .lab-head h3{font-size:24px;font-weight:800}
+  .lab .intro{color:var(--muted);font-size:15px;line-height:1.6;max-width:820px}
+  .lab + .lab{margin-top:34px}
+
+  /* boot lab */
+  .boot-grid{display:grid;grid-template-columns:300px 1fr;gap:26px;margin-top:24px}
+  @media (max-width:820px){.boot-grid{grid-template-columns:1fr}}
+  .toggle-list{display:flex;flex-direction:column;gap:10px}
+  .toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 15px;cursor:pointer;
+    transition:border-color .2s ease}
+  .toggle:hover{border-color:var(--gold2)}
+  .toggle .t-name{font-weight:700;font-size:14.5px}
+  .toggle .t-desc{color:var(--muted);font-size:12px;margin-top:2px;line-height:1.4}
+  .switch{position:relative;width:46px;height:25px;flex-shrink:0}
+  .switch input{opacity:0;width:0;height:0;position:absolute}
+  .track{position:absolute;inset:0;background:#1a2438;border-radius:99px;transition:background .25s ease;cursor:pointer}
+  .track::after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;
+    background:#5b6b8c;transition:transform .25s ease,background .25s ease}
+  .switch input:checked + .track{background:rgba(232,199,102,.28)}
+  .switch input:checked + .track::after{transform:translateX(21px);background:var(--gold)}
+  .chatbox{background:#060a12;border:1px solid var(--line);border-radius:14px;padding:20px;min-height:280px}
+  .bubble{max-width:88%;padding:12px 15px;border-radius:13px;font-size:14.5px;line-height:1.6;margin-bottom:12px;
+    animation:fadeUp .45s ease both}
+  .bubble.customer{background:#16233c;border-bottom-left-radius:4px}
+  .bubble.agent{background:linear-gradient(180deg,#1d2a16,#141f10);border:1px solid #2c4423;border-bottom-right-radius:4px;margin-left:auto}
+  .bubble.agent.risky{background:linear-gradient(180deg,#33161a,#220d10);border-color:#5c232a}
+  .bubble .who{font-family:var(--mono);font-size:10px;letter-spacing:1.6px;text-transform:uppercase;
+    color:var(--muted);display:block;margin-bottom:5px}
+  .flag{display:none;margin-top:4px;padding:11px 14px;border-radius:10px;font-size:13.5px;line-height:1.55}
+  .flag.show{display:block;animation:fadeUp .4s ease both}
+  .flag.bad{background:rgba(255,90,90,.1);border:1px solid rgba(255,90,90,.45);color:#ffb3b3}
+  .flag.good{background:rgba(61,220,132,.08);border:1px solid rgba(61,220,132,.4);color:#a9ecc9}
+  .meter-wrap{margin-top:18px}
+  .meter-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11.5px;
+    letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .meter-top b{color:var(--gold);font-size:14px}
+  .meter{height:14px;background:#101827;border:1px solid var(--line);border-radius:99px;overflow:hidden}
+  .meter-fill{height:100%;width:0%;border-radius:99px;
+    background:linear-gradient(90deg,var(--gold2),var(--gold),#fff0b8);
+    box-shadow:0 0 16px rgba(232,199,102,.55);transition:width .7s cubic-bezier(.22,1,.36,1)}
+
+  /* playground */
+  .palette{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .block-btn{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.8px;cursor:pointer;
+    background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px 16px;
+    transition:all .2s ease}
+  .block-btn:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+  .block-btn small{display:block;font-weight:400;color:var(--muted);font-size:11px;letter-spacing:.2px;margin-top:3px;font-family:var(--sans)}
+  .pipe-zone{margin-top:20px;background:#060a12;border:1px dashed #2a3a5c;border-radius:14px;
+    padding:18px;min-height:86px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .pipe-zone .empty-note{color:var(--muted);font-size:14px;font-family:var(--mono)}
+  .chip{display:flex;align-items:center;gap:9px;background:linear-gradient(180deg,#16233c,#101a2e);
+    border:1px solid #33507e;border-radius:10px;padding:11px 13px;font-family:var(--mono);
+    font-size:13px;font-weight:700;animation:fadeUp .3s ease both}
+  .chip .step-n{color:#0d1424;background:var(--gold);border-radius:5px;padding:1px 7px;font-size:11px}
+  .chip .x{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;padding:0}
+  .chip .x:hover{color:var(--red)}
+  .chip.running{border-color:var(--gold);box-shadow:0 0 18px rgba(232,199,102,.5);background:linear-gradient(180deg,#2a2410,#191407)}
+  .chip.done{border-color:var(--green);opacity:.85}
+  .pipe-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;align-items:center}
+  .runlog{margin-top:20px;background:#04070c;border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px;font-family:var(--mono);font-size:13px;line-height:1.9;min-height:64px;
+    max-height:280px;overflow-y:auto;white-space:pre-wrap}
+  .runlog .ok{color:var(--green)} .runlog .warn{color:#ffb3b3} .runlog .dim{color:var(--muted)}
+  .runlog .gold{color:var(--gold)}
+
+  /* miss hunt */
+  .hunt-score{font-family:var(--mono);font-size:13px;letter-spacing:1.6px;text-transform:uppercase;
+    color:var(--muted);margin-top:20px}
+  .hunt-score b{color:var(--gold);font-size:17px}
+  .transcript{background:#060a12;border:1px solid var(--line);border-radius:14px;padding:18px 18px 8px;margin-top:20px}
+  .transcript h4{font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--gold);margin-bottom:14px}
+  .msg{padding:11px 14px;border-radius:11px;font-size:14px;line-height:1.6;margin-bottom:10px;
+    cursor:pointer;border:1px solid transparent;transition:border-color .2s ease,background .2s ease;max-width:92%}
+  .msg.customer{background:#141f33}
+  .msg.agent{background:#131c11;margin-left:auto}
+  .msg:hover{border-color:#33507e}
+  .msg .who{font-family:var(--mono);font-size:9.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+  .msg.hit{border-color:var(--red);background:rgba(255,90,90,.12)}
+  .msg.miss-pick{border-color:var(--gold2);animation:shake .35s ease}
+  .msg.locked{cursor:default}
+  @keyframes shake{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  .verdict{display:none;padding:12px 15px;border-radius:10px;font-size:14px;line-height:1.6;margin:4px 0 14px}
+  .verdict.show{display:block;animation:fadeUp .4s ease both}
+  .verdict.found{background:rgba(255,90,90,.08);border:1px solid rgba(255,90,90,.4);color:#ffd7d7}
+  .verdict.found b{color:#ff8f8f}
+
+  /* ---------- why strip ---------- */
+  .why{background:linear-gradient(180deg,var(--bg2),var(--bg))}
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media (max-width:760px){.vs{grid-template-columns:1fr}}
+  .vs-col{border:1px solid var(--line);border-radius:16px;padding:28px;background:var(--panel)}
+  .vs-col.win{border-color:var(--gold2);background:linear-gradient(180deg,#141a0c,var(--panel));
+    box-shadow:0 0 40px rgba(232,199,102,.08)}
+  .vs-col h3{font-family:var(--mono);letter-spacing:2px;font-size:14px;text-transform:uppercase;margin-bottom:18px}
+  .vs-col.win h3{color:var(--gold)}
+  .vs-col ul{list-style:none}
+  .vs-col li{padding:9px 0;border-bottom:1px solid rgba(28,42,71,.6);color:var(--muted);font-size:15px;line-height:1.55}
+  .vs-col li:last-child{border-bottom:none}
+  .vs-col.win li{color:var(--ink)}
+  .vs-col li b{color:var(--gold)}
+
+  /* ---------- pricing / footer ---------- */
+  .pricing{text-align:center}
+  .price-line{font-size:clamp(24px,4vw,38px);font-weight:800;line-height:1.3;max-width:760px;margin:0 auto}
+  .price-line .gold{color:var(--gold)}
+  .pricing p{color:var(--muted);margin:16px auto 30px;max-width:560px;line-height:1.65}
+  footer{border-top:1px solid var(--line);padding:40px 0 48px;text-align:center;color:var(--muted);font-size:14px;line-height:1.9}
+  footer .prod{font-family:var(--mono);letter-spacing:2px;text-transform:uppercase;font-size:12px;color:var(--ink)}
+  footer .honest{color:var(--gold);font-family:var(--mono);font-size:12.5px;letter-spacing:1px}
+
+  @media (prefers-reduced-motion: reduce){
+    .mtk-track,.flow-path,.hero .scrollcue{animation:none}
+    .reveal{opacity:1;transform:none;transition:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= TICKER ================= -->
+<div class="mtk" id="mtk" aria-hidden="true">
+  <div class="mtk-track" id="mtkTrack">
+    <div class="mtk-seq"><span class="mtk-item">COMPOSE</span><span class="mtk-sep">✦</span><span class="mtk-item">BOOT SEQUENCE</span><span class="mtk-sep">✦</span><span class="mtk-item">RETRIEVAL</span><span class="mtk-sep">✦</span><span class="mtk-item">AGENT LOOP</span><span class="mtk-sep">✦</span><span class="mtk-item">FINE-TUNING</span><span class="mtk-sep">✦</span><span class="mtk-item">EVALUATION</span><span class="mtk-sep">✦</span><span class="mtk-item hot">PRODUCTION AI</span><span class="mtk-sep">✦</span><span class="mtk-item">NOT PROMPTS</span><span class="mtk-sep">✦</span><span class="mtk-item hot">SHIP IT LIVE</span><span class="mtk-sep">✦</span><span class="mtk-item hot">PRACTICE INSIDE A REAL SYSTEM</span><span class="mtk-sep">✦</span></div>
+  </div>
+</div>
+<script>
+(function(){
+  var cfg = window.MUSE_TICKER || {};
+  var root = document.getElementById('mtk');
+  var track = document.getElementById('mtkTrack');
+  if (!root || !track) return;
+  var c = cfg.colors || {};
+  if (c.bg)     root.style.setProperty('--mtk-bg', c.bg);
+  if (c.text)   root.style.setProperty('--mtk-text', c.text);
+  if (c.accent) root.style.setProperty('--mtk-accent', c.accent);
+  if (c.border) root.style.setProperty('--mtk-border', c.border);
+  if (cfg.speed) track.style.animationDuration = cfg.speed + 's';
+  var items = (cfg.items && cfg.items.length) ? cfg.items : null;
+  if (!items) return;
+  var hot = cfg.highlight || [];
+  var sep = (cfg.separator != null) ? cfg.separator : '✦';
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function seq(){
+    var s = '';
+    for (var i = 0; i < items.length; i++){
+      s += '<span class="mtk-item' + (hot.indexOf(items[i]) >= 0 ? ' hot' : '') + '">'
+         + esc(items[i]) + '</span><span class="mtk-sep">' + esc(sep) + '</span>';
+    }
+    return '<div class="mtk-seq">' + s + '</div>';
+  }
+  track.innerHTML = seq() + seq();
+})();
+</script>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <video autoplay muted loop playsinline poster="hero-poster.jpg">
+    <source src="hero-loop.mp4" type="video/mp4">
+  </video>
+  <div class="veil"></div>
+  <div class="hero-inner">
+    <div class="kicker">An Interactive Course for Business Owners</div>
+    <h1>THE COMPOSER</h1>
+    <div class="sub">Build Production AI, Not Prompts.</div>
+    <p class="lede">Prompting is a tutorial. Composition is the trade. Learn to assemble context,
+      retrieval, agents and evaluation into one production system — and practice every lesson
+      inside a real, live one: Alice.</p>
+    <div class="cta-row">
+      <a class="btn btn-gold" href="mailto:capital7lllc@gmail.com?subject=COMPOSER%20waitlist">Join the Founding Waitlist</a>
+      <a class="btn btn-ghost" href="#labs">Try the Labs ↓</a>
+    </div>
+    <div class="scrollcue">Scroll — the system is live below</div>
+  </div>
+</header>
+
+<!-- ================= SYSTEM DIAGRAM ================= -->
+<section id="system">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">The Production Stack</div>
+      <h2>One system. Six stages. Zero magic.</h2>
+      <p>Every production AI system — including the one this course runs on — is a composition.
+        Data boots up, gets retrieved, an agent loops over it with tools, state carries the memory,
+        and evaluation catches what it misses. This is the machine you will learn to build.</p>
+    </div>
+    <div class="diagram-shell reveal">
+      <svg viewBox="0 0 1140 205" role="img" aria-label="Animated diagram of the production AI stack: Boot Sequence, Retrieval Pipeline, Agent Loop, Tools, State, Evaluation">
+        <!-- forward flow line (passes behind the nodes) -->
+        <path class="flow-path" d="M 100 87 L 1040 87" />
+        <!-- feedback loop: evaluation back into the agent loop -->
+        <path id="loopPath" class="flow-path" d="M 1040 129 L 1040 168 L 476 168 L 476 129" />
+        <!-- stage nodes: x = 20 / 208 / 396 / 584 / 772 / 960, w 160, y 45, h 84 -->
+        <rect class="stage-node-glow" x="20" y="45" width="160" height="84" rx="14"/>
+        <rect class="stage-node" x="20" y="45" width="160" height="84" rx="14"/>
+        <text class="stage-label" x="100" y="84" text-anchor="middle">BOOT</text>
+        <text class="stage-label" x="100" y="104" text-anchor="middle">SEQUENCE</text>
+
+        <rect class="stage-node-glow" x="208" y="45" width="160" height="84" rx="14"/>
+        <rect class="stage-node" x="208" y="45" width="160" height="84" rx="14"/>
+        <text class="stage-label" x="288" y="84" text-anchor="middle">RETRIEVAL</text>
+        <text class="stage-label" x="288" y="104" text-anchor="middle">PIPELINE</text>
+
+        <rect class="stage-node-glow" x="396" y="45" width="160" height="84" rx="14"/>
+        <rect class="stage-node" x="396" y="45" width="160" height="84" rx="14"/>
+        <text class="stage-label" x="476" y="84" text-anchor="middle">AGENT</text>
+        <text class="stage-label" x="476" y="104" text-anchor="middle">LOOP</text>
+
+        <rect class="stage-node-glow" x="584" y="45" width="160" height="84" rx="14"/>
+        <rect class="stage-node" x="584" y="45" width="160" height="84" rx="14"/>
+        <text class="stage-label" x="664" y="94" text-anchor="middle">TOOLS</text>
+
+        <rect class="stage-node-glow" x="772" y="45" width="160" height="84" rx="14"/>
+        <rect class="stage-node" x="772" y="45" width="160" height="84" rx="14"/>
+        <text class="stage-label" x="852" y="94" text-anchor="middle">STATE</text>
+
+        <rect class="stage-node-glow" x="960" y="45" width="160" height="84" rx="14"/>
+        <rect class="stage-node" x="960" y="45" width="160" height="84" rx="14"/>
+        <text class="stage-label" x="1040" y="94" text-anchor="middle">EVALUATION</text>
+
+        <!-- moving pulses along the forward chain -->
+        <circle r="6" fill="#e8c766">
+          <animateMotion dur="6s" repeatCount="indefinite" path="M 100 87 L 1040 87"/>
+        </circle>
+        <circle r="4" fill="#fff0b8" opacity="0.9">
+          <animateMotion dur="6s" begin="2s" repeatCount="indefinite" path="M 100 87 L 1040 87"/>
+        </circle>
+        <circle r="4" fill="#d9a441" opacity="0.9">
+          <animateMotion dur="6s" begin="4s" repeatCount="indefinite" path="M 100 87 L 1040 87"/>
+        </circle>
+        <!-- pulse around the feedback loop -->
+        <circle r="5" fill="#57c8ff">
+          <animateMotion dur="4.5s" repeatCount="indefinite">
+            <mpath href="#loopPath"/>
+          </animateMotion>
+        </circle>
+        <text class="stage-sub" x="758" y="192" text-anchor="middle">EVALUATION FEEDS BACK INTO THE LOOP — UNTIL IT PASSES</text>
+      </svg>
+      <div class="diagram-note">BOOT SEQUENCE → RETRIEVAL PIPELINE → AGENT LOOP → TOOLS → STATE → EVALUATION</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MODULES ================= -->
+<section id="modules" style="padding-top:20px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">The Curriculum</div>
+      <h2>Six modules. One shipped system.</h2>
+      <p>Every module ends with your hands on the machine. Three of them have live labs on this
+        page right now — the same labs, bigger, wait inside the course.</p>
+    </div>
+    <div class="grid">
+      <article class="card reveal">
+        <div class="art"><span class="num">MODULE 01</span><img src="module-1.jpg" alt="Hologram of stacked context layers loading above a glowing core" loading="lazy"></div>
+        <div class="body">
+          <h3>The Boot Sequence</h3>
+          <p>Before an agent thinks, it loads. Business facts, prices, rules, history, guardrails —
+            stacked in the right order, every single time. Get the boot wrong and everything downstream is fiction.</p>
+          <a class="lablink" href="#lab-boot">Open the Boot Lab →</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <div class="art"><span class="num">MODULE 02</span><img src="module-2.jpg" alt="Glowing documents streaming through a gold retrieval funnel" loading="lazy"></div>
+        <div class="body">
+          <h3>Retrieval, For Real</h3>
+          <p>Not "upload a PDF and pray." Pre-retrieval, retrieval, post-retrieval — filtering, scoring,
+            re-ranking — so your agent answers from the right page of your business, not a plausible one.</p>
+        </div>
+      </article>
+      <article class="card reveal">
+        <div class="art"><span class="num">MODULE 03</span><img src="module-3.jpg" alt="Interlocking gold gears and network nodes in a circular agent loop" loading="lazy"></div>
+        <div class="body">
+          <h3>The Agent Loop</h3>
+          <p>Tools, tool tracking, state. The loop that turns a chat into a worker: answer, quote, book,
+            follow up — in the right order, with a human safety net woven in.</p>
+          <a class="lablink" href="#lab-playground">Open the Playground →</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <div class="art"><span class="num">MODULE 04</span><img src="module-4.jpg" alt="Gold tuning dials and a voice waveform on a dark console" loading="lazy"></div>
+        <div class="body">
+          <h3>Fine-Tuning, Owner Edition</h3>
+          <p>Train the system on your trade, your prices, your voice — no code. The owner-level version
+            of fine-tuning: examples, corrections, and a knowledge bank that compounds.</p>
+        </div>
+      </article>
+      <article class="card reveal">
+        <div class="art"><span class="num">MODULE 05</span><img src="module-5.jpg" alt="Gold radar sweep catching red anomalies on a dark screen" loading="lazy"></div>
+        <div class="body">
+          <h3>Evaluation — Catching What It Misses</h3>
+          <p>Production systems are graded, not trusted. Score transcripts, hunt the planted misses —
+            invented prices, dropped bookings, broken guardrails — and fix them before customers find them.</p>
+          <a class="lablink" href="#lab-hunt">Play Miss Hunt →</a>
+        </div>
+      </article>
+      <article class="card reveal">
+        <div class="art"><span class="num">MODULE 06</span><img src="module-6.jpg" alt="A glowing gold system core launching upward with light trails" loading="lazy"></div>
+        <div class="body">
+          <h3>Capstone — Ship It Live</h3>
+          <p>No certificate for watching. You graduate when one production system — yours — is live,
+            taking real requests from real customers, with you at the console.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LABS ================= -->
+<section id="labs" style="padding-top:20px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">Live Labs — No Signup</div>
+      <h2>Don't take our word for it. Break the machine yourself.</h2>
+      <p>Three working slices of the course, live on this page. Toggle the context. Assemble the
+        pipeline. Hunt the misses. This is how every module in THE COMPOSER feels.</p>
+    </div>
+
+    <!-- LAB A: BOOT SEQUENCE -->
+    <div class="lab reveal" id="lab-boot">
+      <div class="lab-head"><span class="mod">Module 01 · Lab</span><h3>The Boot Sequence Lab</h3></div>
+      <p class="intro">One customer question. One agent. Five context layers you control.
+        Flip layers off and watch the exact same agent get dumber — or dangerous. This is why
+        the boot sequence is Module 1: everything an agent says is downstream of what it loaded.</p>
+      <div class="boot-grid">
+        <div class="toggle-list" id="bootToggles">
+          <label class="toggle"><span><span class="t-name">Business facts</span><span class="t-desc" style="display:block">Name, hours, service area, what the shop actually does</span></span>
+            <span class="switch"><input type="checkbox" id="tg-facts" checked><span class="track"></span></span></label>
+          <label class="toggle"><span><span class="t-name">Price list</span><span class="t-desc" style="display:block">The owner's real rates — the only prices the agent may quote</span></span>
+            <span class="switch"><input type="checkbox" id="tg-prices" checked><span class="track"></span></span></label>
+          <label class="toggle"><span><span class="t-name">Service rules</span><span class="t-desc" style="display:block">How jobs get booked: deposit, confirmation, scheduling windows</span></span>
+            <span class="switch"><input type="checkbox" id="tg-rules" checked><span class="track"></span></span></label>
+          <label class="toggle"><span><span class="t-name">Customer history</span><span class="t-desc" style="display:block">Past jobs, address on file, preferences</span></span>
+            <span class="switch"><input type="checkbox" id="tg-history" checked><span class="track"></span></span></label>
+          <label class="toggle"><span><span class="t-name">Trade guardrails</span><span class="t-desc" style="display:block">What the agent must never promise, quote, or advise on</span></span>
+            <span class="switch"><input type="checkbox" id="tg-guard" checked><span class="track"></span></span></label>
+        </div>
+        <div>
+          <div class="chatbox">
+            <div class="bubble customer"><span class="who">Customer · Dana</span>
+              Hi — my kitchen sink is leaking under the cabinet and it's getting worse. Can someone come Thursday? And what would it cost?</div>
+            <div class="bubble agent" id="bootAnswer"><span class="who">Agent</span><span id="bootAnswerText"></span></div>
+            <div class="flag" id="bootFlag"></div>
+          </div>
+          <div class="meter-wrap">
+            <div class="meter-top"><span>Answer quality</span><b id="bootScore">100 / 100</b></div>
+            <div class="meter"><div class="meter-fill" id="bootMeter"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAB B: COMPOSER PLAYGROUND -->
+    <div class="lab reveal" id="lab-playground">
+      <div class="lab-head"><span class="mod">Module 03 · Lab</span><h3>The Composer Playground</h3></div>
+      <p class="intro">Click blocks to assemble your agent's pipeline, in order. Then run a live
+        request through it. Order is not decoration — it's the difference between a booked job
+        and a booked headache. Click a placed block's ✕ to remove it.</p>
+      <div class="palette" id="palette">
+        <button class="block-btn" data-block="Answer">＋ Answer<small>Instant first reply</small></button>
+        <button class="block-btn" data-block="Quote">＋ Quote<small>Price from the price list</small></button>
+        <button class="block-btn" data-block="Book">＋ Book<small>Offer &amp; confirm a slot</small></button>
+        <button class="block-btn" data-block="Follow Up">＋ Follow Up<small>Reminders &amp; check-ins</small></button>
+        <button class="block-btn" data-block="Human Handoff">＋ Human Handoff<small>Owner steps in</small></button>
+        <button class="block-btn" data-block="Payment Link">＋ Payment Link<small>Deposit holds the slot</small></button>
+      </div>
+      <div class="pipe-zone" id="pipeZone"><span class="empty-note">Your pipeline is empty — add blocks above.</span></div>
+      <div class="pipe-actions">
+        <button class="btn btn-gold" id="runBtn" style="border:none">▶ Run It</button>
+        <button class="btn btn-ghost" id="clearBtn">Clear pipeline</button>
+      </div>
+      <div class="runlog" id="runLog"><span class="dim">Run log idle. Assemble a pipeline and press RUN IT.</span></div>
+    </div>
+
+    <!-- LAB C: MISS HUNT -->
+    <div class="lab reveal" id="lab-hunt">
+      <div class="lab-head"><span class="mod">Module 05 · Lab</span><h3>Miss Hunt</h3></div>
+      <p class="intro">Three real-style transcripts. Each hides exactly one miss — an invented price,
+        a dropped booking, a broken guardrail. Click the message you believe is the miss.
+        Evaluators don't trust systems. They grade them.</p>
+      <div class="hunt-score">Misses caught: <b id="huntScore">0 / 3</b></div>
+      <div id="huntZone"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY ================= -->
+<section class="why">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">Why This Beats a Bootcamp</div>
+      <h2>Practice projects graduate. Assets pay.</h2>
+    </div>
+    <div class="vs">
+      <div class="vs-col reveal">
+        <h3>A Bootcamp</h3>
+        <ul>
+          <li>Nine practice projects in a sandbox nobody visits</li>
+          <li>Toy datasets, fake customers, pretend stakes</li>
+          <li>A certificate at the end</li>
+          <li>Then you're on your own, wiring it up for real</li>
+        </ul>
+      </div>
+      <div class="vs-col win reveal">
+        <h3>The Composer</h3>
+        <ul>
+          <li><b>One production system — yours</b> — live before you finish</li>
+          <li>Your trade, your prices, your customers, real stakes</li>
+          <li>Practice inside a working system: <b>Alice</b>, the AI office hub</li>
+          <li>You graduate with <b>a working business asset</b>, not homework</li>
+        </ul>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--muted);margin-top:26px" class="reveal">
+      The labs on this page run on the same ideas that power
+      <a href="https://aliceaihub.xyz">Alice AI Office Hub</a> — the course feeds the system, and the system feeds your business.
+    </p>
+  </div>
+</section>
+
+<!-- ================= PRICING TEASER ================= -->
+<section class="pricing">
+  <div class="wrap reveal">
+    <div class="sec-tag">Founding Cohort</div>
+    <div class="price-line">Founding pricing from <span class="gold">$297</span> — locked for the first cohort.</div>
+    <p>No checkout yet, no countdown theater. Enrollment opens soon — the waitlist is the door,
+      and founding pricing dies when the first cohort fills.</p>
+    <a class="btn btn-gold" href="mailto:capital7lllc@gmail.com?subject=COMPOSER%20waitlist">Join the Founding Waitlist</a>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="prod">A Capital 7 / Alice AI Office Hub production</div>
+    <div>Built on the system it teaches · <a href="https://aliceaihub.xyz">aliceaihub.xyz</a></div>
+    <div class="honest">Enrollment opens soon — the waitlist is the door.</div>
+  </div>
+</footer>
+
+<script>
+/* ================= reveal on scroll ================= */
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { els.forEach(function(e){ e.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(function(e){ io.observe(e); });
+})();
+
+/* ================= LAB A — BOOT SEQUENCE ================= */
+(function(){
+  var ids = { facts:'tg-facts', prices:'tg-prices', rules:'tg-rules', history:'tg-history', guard:'tg-guard' };
+  var ansBubble = document.getElementById('bootAnswer');
+  var ansText = document.getElementById('bootAnswerText');
+  var flag = document.getElementById('bootFlag');
+  var meter = document.getElementById('bootMeter');
+  var scoreEl = document.getElementById('bootScore');
+  function on(id){ return document.getElementById(ids[id]).checked; }
+
+  function update(){
+    var F=on('facts'), P=on('prices'), R=on('rules'), H=on('history'), G=on('guard');
+    var biz = F ? 'Keystone Home Services' : null;
+    var text, flagText, flagClass, risky=false;
+
+    if (!G) {
+      risky = true;
+      text = 'No problem at all, Dana — we guarantee we will fix it Thursday, 100%, and it will be exactly $120 total, not a penny more, whatever we find under there. No deposit, no service-call fee. And if it bursts before Thursday, just keep a bucket under it — totally safe to wait.';
+      flagText = '⚠ GUARDRAILS OFF — the agent just guaranteed an exact price and a same-week fix it cannot promise, and waved off a burst-pipe risk. This is how a chatbot writes checks the business can\'t cash. Turn Trade guardrails back on.';
+      flagClass = 'flag show bad';
+    } else if (!P) {
+      text = (biz ? 'Hi Dana — this is ' + biz + '. ' : 'Hi Dana — thanks for reaching out. ')
+        + 'We can absolutely take a look on Thursday. On cost, it honestly depends on what we find under the cabinet — could be minor, could be more involved, so I can\'t really give you a number. '
+        + (R ? 'Want me to hold a Thursday window while we figure it out on site?' : 'Maybe check back Thursday and we\'ll see?');
+      flagText = 'PRICE LIST OFF — the agent has nothing true to quote, so it goes vague. Vague answers don\'t book jobs; the customer calls the next name on the list. (The 5-Minute Cliff, Module 2.)';
+      flagClass = 'flag show bad';
+    } else if (!F) {
+      text = 'Hi! Thanks for reaching out. For a leak repair like that, it\'s a $95 service call and typically $180–$240 all in. Thursday should work — what time suits you?';
+      flagText = 'BUSINESS FACTS OFF — it can quote, but it doesn\'t know who it is: no business name, no hours, no service area. It can\'t even confirm Dana is inside the area it serves.';
+      flagClass = 'flag show bad';
+    } else if (!R) {
+      text = 'Hi Dana — ' + biz + ' here. That repair is a $95 service call and usually $180–$240 total, confirmed on site. Just keep Thursday morning open and we\'ll swing by at some point — no need to confirm anything or put a deposit down.';
+      flagText = 'SERVICE RULES OFF — right price, wrong close. No confirmed slot, no deposit, no confirmation message. "Some point Thursday" is how jobs evaporate.';
+      flagClass = 'flag show bad';
+    } else if (H) {
+      text = 'Welcome back, Dana — sorry the leak at the Maple St house is getting worse. This is ' + biz + '. A sink-leak repair visit is a $95 service call, and most under-cabinet repairs land between $180–$240 parts and labor, confirmed on site before any work starts. Thursday we have 9:00 AM or 1:00 PM open. I can hold the 9:00 with a $50 deposit link — want me to lock it in?';
+      flagText = '✓ FULL STACK — named business, real prices, booking rules followed, and history made it personal: Dana is a returning customer and the agent knew it. This is composition, not prompting.';
+      flagClass = 'flag show good';
+    } else {
+      text = 'Hi Dana — this is ' + biz + ', sorry to hear about the leak. A sink-leak repair visit is a $95 service call, and most under-cabinet repairs land between $180–$240 parts and labor, confirmed on site before any work starts. Thursday we have 9:00 AM or 1:00 PM open. I can hold the 9:00 with a $50 deposit link — want me to lock it in?';
+      flagText = '✓ NEARLY FULL — correct and bookable. Only Customer history is off, so the agent missed that Dana is a returning customer at a known address. Good answer; not a relationship.';
+      flagClass = 'flag show good';
+    }
+
+    var score = (F?25:0) + (P?25:0) + (R?20:0) + (H?10:0) + (G?20:0);
+    if (!G) score = Math.min(score, 45);
+
+    ansText.textContent = text;
+    ansBubble.classList.toggle('risky', risky);
+    flag.textContent = flagText;
+    flag.className = flagClass;
+    meter.style.width = score + '%';
+    scoreEl.textContent = score + ' / 100';
+    ansBubble.style.animation = 'none'; void ansBubble.offsetWidth; ansBubble.style.animation = '';
+  }
+  Object.keys(ids).forEach(function(k){
+    document.getElementById(ids[k]).addEventListener('change', update);
+  });
+  update();
+})();
+
+/* ================= LAB B — COMPOSER PLAYGROUND ================= */
+(function(){
+  var pipeline = [];
+  var zone = document.getElementById('pipeZone');
+  var log = document.getElementById('runLog');
+  var runBtn = document.getElementById('runBtn');
+  var running = false;
+
+  var LINES = {
+    'Answer':       '▸ ANSWER — request received → instant reply sent in 4 seconds.',
+    'Quote':        '▸ QUOTE — price pulled from the owner\'s price list → $95 call + $180–$240 typical range.',
+    'Book':         '▸ BOOK — Thursday 9:00 AM offered, accepted, confirmed.',
+    'Follow Up':    '▸ FOLLOW UP — reminder + day-before check-in scheduled.',
+    'Human Handoff':'▸ HUMAN HANDOFF — safety net armed: the owner is alerted the moment confidence drops.',
+    'Payment Link': '▸ PAYMENT LINK — $50 deposit link sent; the slot is held when it lands.'
+  };
+
+  function render(){
+    zone.innerHTML = '';
+    if (!pipeline.length) {
+      zone.innerHTML = '<span class="empty-note">Your pipeline is empty — add blocks above.</span>';
+      return;
+    }
+    pipeline.forEach(function(name, i){
+      var chip = document.createElement('span');
+      chip.className = 'chip'; chip.dataset.idx = i;
+      chip.innerHTML = '<span class="step-n">' + (i+1) + '</span>' + name +
+        '<button class="x" title="Remove" aria-label="Remove ' + name + '">✕</button>';
+      chip.querySelector('.x').addEventListener('click', function(){
+        if (running) return;
+        pipeline.splice(i, 1); render();
+      });
+      zone.appendChild(chip);
+    });
+  }
+
+  document.getElementById('palette').addEventListener('click', function(e){
+    var btn = e.target.closest('[data-block]');
+    if (!btn || running) return;
+    pipeline.push(btn.dataset.block);
+    render();
+  });
+  document.getElementById('clearBtn').addEventListener('click', function(){
+    if (running) return;
+    pipeline = []; render();
+    log.innerHTML = '<span class="dim">Pipeline cleared. Assemble and press RUN IT.</span>';
+  });
+
+  function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+  function logLine(html, cls){
+    var div = document.createElement('div');
+    if (cls) div.className = cls;
+    div.innerHTML = html;
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  runBtn.addEventListener('click', async function(){
+    if (running) return;
+    if (!pipeline.length) {
+      log.innerHTML = '';
+      logLine('⚠ Nothing to run — the customer\'s request hits an empty pipeline and dies in silence.', 'warn');
+      return;
+    }
+    running = true; runBtn.disabled = true; runBtn.style.opacity = '.55';
+    log.innerHTML = '';
+    logLine('Incoming request: "Kitchen sink leaking — can you come Thursday, and what does it cost?"', 'gold');
+    var chips = zone.querySelectorAll('.chip');
+    for (var i = 0; i < pipeline.length; i++) {
+      chips[i].classList.add('running');
+      await wait(750);
+      logLine(LINES[pipeline[i]], 'ok');
+      chips[i].classList.remove('running');
+      chips[i].classList.add('done');
+    }
+    await wait(250);
+    var warnings = 0;
+    var qi = pipeline.indexOf('Quote'), bi = pipeline.indexOf('Book');
+    if (bi > -1 && (qi === -1 || qi > bi)) {
+      logLine('⚠ OUT OF ORDER — jobs get booked without a price: Book runs before Quote in this pipeline.', 'warn');
+      warnings++;
+    }
+    if (pipeline.indexOf('Human Handoff') === -1) {
+      logLine('⚠ NO SAFETY NET — no Human Handoff block: when this agent gets confused, nobody is coming.', 'warn');
+      warnings++;
+    }
+    if (pipeline.indexOf('Answer') === -1) {
+      logLine('⚠ NO ANSWER BLOCK — the customer waits in silence. Remember the 5-Minute Cliff.', 'warn');
+      warnings++;
+    }
+    if (warnings === 0) {
+      logLine('✓ CLEAN RUN — answered, quoted, booked, with a human safety net. This composition makes money while you work.', 'gold');
+    } else {
+      logLine('RESULT — the request got through, but this composition has ' + warnings + ' hole' + (warnings>1?'s':'') + '. In production, holes are where jobs leak out.', 'dim');
+    }
+    running = false; runBtn.disabled = false; runBtn.style.opacity = '';
+  });
+
+  render();
+})();
+
+/* ================= LAB C — MISS HUNT ================= */
+(function(){
+  var TRANSCRIPTS = [
+    {
+      title: 'Transcript 1 — The Gutter Job',
+      miss: 3,
+      explain: '<b>THE MISS: an invented price.</b> The agent guaranteed "$400 flat" — a number that exists nowhere on the price list, which says gutter replacement is quoted on site after measurements. <b>The fix:</b> agents quote only from the loaded price list; anything else is "quoted on site," plus a booked measurement visit.',
+      msgs: [
+        ['customer', 'Hi — how much to replace my gutters? About 40 feet, one story.'],
+        ['agent',    'We price gutter replacement on site after measurements, so I can\'t quote it blind — but I can book a free measurement visit this week.'],
+        ['customer', 'A ballpark is fine. Even rough. I just need a number.'],
+        ['agent',    'Sure — for 40 feet, one story, that\'s $400 flat, guaranteed. We can book you Friday.']
+      ]
+    },
+    {
+      title: 'Transcript 2 — The Drain Cleaning',
+      miss: 3,
+      explain: '<b>THE MISS: a dropped booking.</b> The customer accepted the slot — and the agent closed the conversation without booking anything: no confirmation, no deposit, no calendar entry. <b>The fix:</b> an accepted slot is a booking. Confirm it, send the confirmation, take the deposit — in the same breath.',
+      msgs: [
+        ['customer', 'I need a drain cleaning this week if you have anything.'],
+        ['agent',    'We have Thursday 9:00 AM or Friday 11:00 AM open for drain cleaning.'],
+        ['customer', 'Thursday 9 works perfect.'],
+        ['agent',    'Great, glad that works! Let us know if you need anything else.']
+      ]
+    },
+    {
+      title: 'Transcript 3 — The Breaker Panel',
+      miss: 1,
+      explain: '<b>THE MISS: a broken guardrail.</b> The agent gave step-by-step instructions for opening a live electrical panel — work the guardrails reserve for a licensed electrician. <b>The fix:</b> guardrail topics get a deflection plus an offer: "That one\'s for a licensed electrician — I can book you a visit." Notice the agent\'s second reply does exactly that; the first one already crossed the line.',
+      msgs: [
+        ['customer', 'My breaker keeps tripping. Can you walk me through opening the panel and swapping the breaker myself?'],
+        ['agent',    'Sure — kill the main breaker, pull the panel cover off, pop the old breaker out and snap the new one in. Takes about ten minutes.'],
+        ['customer', 'And if I see scorched wires in there?'],
+        ['agent',    'Then stop — that\'s a job for a licensed electrician, and I can book you a visit.']
+      ]
+    }
+  ];
+
+  var zone = document.getElementById('huntZone');
+  var scoreEl = document.getElementById('huntScore');
+  var caught = 0;
+
+  TRANSCRIPTS.forEach(function(t){
+    var box = document.createElement('div');
+    box.className = 'transcript';
+    var h = document.createElement('h4'); h.textContent = t.title; box.appendChild(h);
+    var verdict = document.createElement('div');
+    verdict.className = 'verdict';
+    var solved = false;
+
+    t.msgs.forEach(function(m, idx){
+      var div = document.createElement('div');
+      div.className = 'msg ' + m[0];
+      div.innerHTML = '<span class="who">' + (m[0] === 'customer' ? 'Customer' : 'Agent') + '</span>' + m[1];
+      div.addEventListener('click', function(){
+        if (solved) return;
+        if (idx === t.miss) {
+          solved = true;
+          div.classList.add('hit');
+          box.querySelectorAll('.msg').forEach(function(x){ x.classList.add('locked'); });
+          verdict.className = 'verdict show found';
+          verdict.innerHTML = t.explain;
+          caught++;
+          scoreEl.textContent = caught + ' / 3';
+          if (caught === 3) {
+            scoreEl.textContent = '3 / 3 — ALL MISSES CAUGHT. That\'s evaluator eyes.';
+          }
+        } else {
+          div.classList.remove('miss-pick'); void div.offsetWidth; div.classList.add('miss-pick');
+          verdict.className = 'verdict show';
+          verdict.style.border = '1px solid var(--gold2)';
+          verdict.style.background = 'rgba(232,199,102,.07)';
+          verdict.style.color = 'var(--ink)';
+          verdict.textContent = 'Not the miss — that one\'s clean. Read like an evaluator and try again.';
+        }
+      });
+      box.appendChild(div);
+    });
+    box.appendChild(verdict);
+    zone.appendChild(box);
+  });
+})();
+</script>
+</body>
+</html>
