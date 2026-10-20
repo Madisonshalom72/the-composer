@@ -252,6 +252,19 @@ window.MUSE_TICKER = {
   .price-line{font-size:clamp(24px,4vw,38px);font-weight:800;line-height:1.3;max-width:760px;margin:0 auto}
   .price-line .gold{color:var(--gold)}
   .pricing p{color:var(--muted);margin:16px auto 30px;max-width:560px;line-height:1.65}
+  .price-line .was{color:var(--muted);text-decoration:line-through;font-weight:600;font-size:.6em;vertical-align:.24em;margin-right:14px}
+  .tiers{display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:940px;margin:36px auto 34px;text-align:left}
+  .tier{border:1px solid var(--line);border-radius:14px;padding:28px 26px 26px;background:linear-gradient(180deg,rgba(232,199,102,.06),rgba(232,199,102,0) 55%)}
+  .tier h3{font-family:var(--mono);letter-spacing:2px;font-size:13.5px;text-transform:uppercase;color:var(--ink);margin-bottom:8px}
+  .tier .t-sub{color:var(--muted);font-size:14.5px;line-height:1.55;margin-bottom:18px}
+  .tier .t-price{font-size:clamp(32px,3.6vw,42px);font-weight:800;line-height:1.1;color:var(--gold)}
+  .tier .t-price .was{color:var(--muted);text-decoration:line-through;font-size:.55em;font-weight:600;margin-right:12px;vertical-align:.26em}
+  .tier .t-note{font-family:var(--mono);font-size:11.5px;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;margin-top:8px}
+  .tier ul{list-style:none;margin:20px 0 24px}
+  .tier li{padding:8px 0;border-bottom:1px solid rgba(28,42,71,.6);color:var(--muted);font-size:14.5px;line-height:1.55}
+  .tier li:last-child{border-bottom:none}
+  .tier li b{color:var(--ink)}
+  @media (max-width:760px){.tiers{grid-template-columns:1fr}}
   footer{border-top:1px solid var(--line);padding:40px 0 48px;text-align:center;color:var(--muted);font-size:14px;line-height:1.9}
   footer .prod{font-family:var(--mono);letter-spacing:2px;text-transform:uppercase;font-size:12px;color:var(--ink)}
   footer .honest{color:var(--gold);font-family:var(--mono);font-size:12.5px;letter-spacing:1px}
@@ -482,7 +495,9 @@ window.MUSE_TICKER = {
         <div class="body">
           <h3>Capstone — Ship It Live</h3>
           <p>No certificate for watching. You graduate when one production system — yours — is live,
-            taking real requests from real customers, with you at the console.</p>
+            taking real requests from real customers, with you at the console. The capstone ships two
+            things: the real system, and 🌐 your own developer portfolio site — the page that presents
+            it to employers. Pass, and the 🏆 certificate of completion is awarded.</p>
         </div>
       </article>
     </div>
@@ -631,6 +646,8 @@ window.MUSE_TICKER = {
           <li>Your trade, your prices, your customers, real stakes</li>
           <li>Practice inside a working system: <b>Alice</b>, the AI office hub</li>
           <li>You graduate with <b>a working business asset</b>, not homework</li>
+          <li>🏆 <b>Certificate of completion</b> — awarded on capstone pass, not for watching</li>
+          <li>🌐 <b>Your own developer portfolio site</b> — showcase your shipped projects to employers</li>
         </ul>
       </div>
     </div>
@@ -641,14 +658,47 @@ window.MUSE_TICKER = {
   </div>
 </section>
 
-<!-- ================= PRICING TEASER ================= -->
+<!-- ================= PRICING ================= -->
 <section class="pricing">
   <div class="wrap reveal">
     <div class="sec-tag">Founding Cohort</div>
-    <div class="price-line">Founding pricing from <span class="gold">$297</span> — locked for the first cohort.</div>
+    <div class="price-line"><span class="was">$1,999</span><span class="gold">$499</span> — Founding Cohort pricing for the full course.</div>
     <p>No checkout yet, no countdown theater. Enrollment opens soon — the waitlist is the door,
       and founding pricing dies when the first cohort fills.</p>
-    <a class="btn btn-gold" href="mailto:capital7lllc@gmail.com?subject=COMPOSER%20waitlist">Join the Founding Waitlist</a>
+    <div class="tiers">
+      <div class="tier">
+        <h3>The Composer — Full Course</h3>
+        <div class="t-sub">All ten modules, Module 00 through the Capstone. You graduate with one
+          production system — yours — live.</div>
+        <div class="t-price"><span class="was">$1,999</span>$499</div>
+        <div class="t-note">Founding Cohort · Full 10-Module Course</div>
+        <ul>
+          <li><b>All 10 modules</b> — How the Machine Thinks through the Capstone</li>
+          <li><b>Four live labs</b> — the interactives on this page are slices of the real thing</li>
+          <li>🏆 <b>Certificate of completion</b> — awarded on capstone pass</li>
+          <li>🌐 <b>Your own developer portfolio site</b> — showcase your shipped projects to employers</li>
+          <li><b>Capstone</b> — one production system, live, taking real requests</li>
+        </ul>
+        <a class="btn btn-gold" href="mailto:capital7lllc@gmail.com?subject=COMPOSER%20waitlist">Join the Founding Waitlist</a>
+      </div>
+      <div class="tier">
+        <h3>Cohort 2 — The Advanced Tier</h3>
+        <div class="t-sub">The upper tier: five advanced modules for Composer graduates, opening
+          as the Cohort 2 release after Cohort 1 ships.</div>
+        <div class="t-price">$2,999</div>
+        <div class="t-note">Cohort 2 · Advanced Tier</div>
+        <ul>
+          <li><b>Tools &amp; Permissions</b></li>
+          <li><b>The Economics of Intelligence</b></li>
+          <li><b>Failure School</b></li>
+          <li><b>Your Business Is the Dataset</b></li>
+          <li><b>Selling the System</b></li>
+          <li>🏆 <b>Advanced certificate</b> — Cohort 2</li>
+          <li>🌐 <b>Portfolio grows with you</b> — your advanced projects join the showcase</li>
+        </ul>
+        <a class="btn btn-gold" href="mailto:capital7lllc@gmail.com?subject=COMPOSER%20waitlist">Join the Waitlist — Cohort 2</a>
+      </div>
+    </div>
   </div>
 </section>
 
